@@ -1,7 +1,6 @@
-import React, { useState, useRef } from "react";
-import { ChakraProvider, Box, VStack, Heading, Text, Input, Button, extendTheme, Container, Stack, HStack, useToast, useDisclosure } from "@chakra-ui/react";
-import { FaPaperPlane, FaHistory } from "react-icons/fa";
-import ChatHistorySidebar from "../components/ChatHistorySidebar";
+import React, { useState } from "react";
+import { ChakraProvider, Box, VStack, Heading, Text, Input, Button, extendTheme, Container, Stack, HStack, useToast } from "@chakra-ui/react";
+import { FaPaperPlane } from "react-icons/fa";
 
 const theme = extendTheme({
   styles: {
@@ -14,7 +13,6 @@ const theme = extendTheme({
 });
 
 const Index = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const toast = useToast();
@@ -72,27 +70,21 @@ const Index = () => {
               ))}
             </Stack>
           </Box>
-          <HStack w="full" justifyContent="space-between">
-            <Button leftIcon={<FaHistory />} colorScheme="blue" onClick={onOpen}>
-              History
+          <HStack w="full">
+            <Input
+              placeholder="Type your message here..."
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  sendMessage();
+                }
+              }}
+            />
+            <Button leftIcon={<FaPaperPlane />} colorScheme="blue" onClick={sendMessage}>
+              Send
             </Button>
-            <HStack flex={1}>
-              <Input
-                placeholder="Type your message here..."
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    sendMessage();
-                  }
-                }}
-              />
-              <Button leftIcon={<FaPaperPlane />} colorScheme="blue" onClick={sendMessage}>
-                Send
-              </Button>
-            </HStack>
           </HStack>
-          <ChatHistorySidebar isOpen={isOpen} onClose={onClose} messages={messages} />
         </VStack>
       </Container>
     </ChakraProvider>
